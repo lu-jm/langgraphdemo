@@ -1,0 +1,37 @@
+[project]
+name = "lang-graph"
+version = "0.1.0"
+description = "LangGraph Agent backend with FastAPI, AG-UI and A2UI"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "ag-ui-langgraph>=0.0.47",
+    "ag-ui-protocol>=1.0.0",
+    "fastapi>=0.162.0",
+    "jsonschema>=4.26.0",
+    "langchain-community>=0.4.2",
+    "langchain-core>=1.5.4",
+    "langchain-openai>=1.4.3",
+    "langgraph>=1.2.11",
+    "langgraph-checkpoint-sqlite>=3.1.2",
+    "pydantic-settings>=2.15.0",
+    "python-dotenv>=1.2.2",
+    "uvicorn[standard]>=0.54.0",
+    "zhipuai>=2.1.5.20250825",
+]
+
+[project.scripts]
+agent-api = "app.main:run"
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28.1",
+    "pytest>=9.1.1",
+    "pytest-asyncio>=1.4.1",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+asyncio_mode = "auto"
+addopts = "-q"
