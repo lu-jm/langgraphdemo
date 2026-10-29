@@ -6,7 +6,7 @@
 from __future__ import annotations
 
 from functools import lru_cache
-from typing import Literal
+from typing import Any, Literal
 
 from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -46,10 +46,15 @@ class Settings(BaseSettings):
     zhipuai_model: str = "glm-4.7"
     zhipuai_temperature: float = 0.3
 
-    openai_api_key: str | None = "sk-34db2645664141bd823b2bdc8776e33e"
+    openai_api_key: str | None = None
     openai_model: str = "deepseek-flash"
-    openai_base_url: str | None = None
+    openai_base_url: str | None = "https://api.deepseek.com"
     openai_temperature: float = 0.3
+    # DeepSeek 思考模式开关：auto / enabled / disabled。
+    # auto：DeepSeek 域名下自动关闭，其他兼容接口不发送该字段；
+    # DeepSeek 思考模式不支持强制 tool_choice（动态 A2UI 子 Agent 会用到），
+    # 因此默认建议 disabled。
+    openai_thinking_mode: Literal["auto", "enabled", "disabled"] = "auto"
 
     # --- Agent ------------------------------------------------------------
     agent_recursion_limit: int = 30
@@ -94,6 +99,23 @@ class Settings(BaseSettings):
     @property
     def model_configured(self) -> bool:
         return bool(self.model_api_key)
+
+    @property
+    def openai_extra_body(self) -> dict[str, Any] | None:
+        """OpenAI 兼容接口的额外请求体。
+
+        DeepSeek 的思考模式默认开启，且不支持强制 ``tool_choice``；
+        动态 A2UI 子 Agent 需要强制工具调用，因此在 DeepSeek 域名下自动关闭。
+        其他 OpenAI 兼容服务不发送该字段，避免不识别 ``thinking`` 参数。
+        """
+
+        mode = self.openai_thinking_mode
+        if mode == "auto":
+            base_url = (self.openai_base_url or "").lower()
+            if "deepseek" not in base_url:
+                return None
+            mode = "disabled"
+        return {"thinking": {"type": mode}}
 
     @property
     def active_model_name(self) -> str:

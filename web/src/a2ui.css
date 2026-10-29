@@ -1,0 +1,570 @@
+/* A2UI Basic Catalog 渲染样式 */
+
+.surface {
+  --a2ui-primary: #2563eb;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--bg-elevated);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.surface__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--a2ui-primary) 4%, var(--bg-elevated));
+}
+
+.surface__identity {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  color: var(--muted);
+}
+
+.surface__name {
+  font-size: 11.5px;
+  font-weight: 650;
+  color: var(--text-soft);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.surface__id {
+  max-width: 150px;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--text) 6%, transparent);
+  color: var(--muted);
+  font-size: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.surface__actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 0 0 auto;
+}
+
+.surface__badge {
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--a2ui-primary) 12%, transparent);
+  color: var(--a2ui-primary);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+
+.surface__icon-button {
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.surface__icon-button:hover {
+  background: color-mix(in srgb, var(--text) 8%, transparent);
+  color: var(--text);
+}
+
+.surface__icon-button.is-active {
+  background: color-mix(in srgb, var(--a2ui-primary) 12%, transparent);
+  color: var(--a2ui-primary);
+}
+
+.surface__body {
+  padding: 16px 18px;
+}
+
+.surface__json {
+  margin: 0;
+  padding: 14px 16px;
+  max-height: 340px;
+  overflow: auto;
+  background: color-mix(in srgb, var(--bg) 60%, transparent);
+  color: var(--text-soft);
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+/* ---------- 文本 ---------- */
+
+.a2ui-text {
+  color: var(--text-soft);
+  min-width: 0;
+}
+
+.a2ui-text .markdown {
+  color: inherit;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.a2ui-text .markdown p {
+  margin: 0;
+}
+
+.a2ui-text .markdown > :first-child {
+  margin-top: 0;
+}
+
+.a2ui-text .markdown > :last-child {
+  margin-bottom: 0;
+}
+
+.a2ui-text--h1 .markdown {
+  color: var(--text);
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+.a2ui-text--h2 .markdown {
+  color: var(--text);
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+}
+
+.a2ui-text--h3 .markdown {
+  color: var(--text);
+  font-size: 17px;
+  font-weight: 650;
+  line-height: 1.35;
+}
+
+.a2ui-text--h4 .markdown {
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 650;
+}
+
+.a2ui-text--h5 .markdown {
+  color: var(--text);
+  font-size: 13.5px;
+  font-weight: 650;
+}
+
+.a2ui-text--caption .markdown {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.a2ui-text--body .markdown {
+  font-size: 14px;
+}
+
+/* ---------- 布局 ---------- */
+
+.a2ui-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: 100%;
+}
+
+.a2ui-column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.a2ui-list {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.a2ui-list--vertical {
+  flex-direction: column;
+}
+
+.a2ui-list--horizontal {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.a2ui-card {
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--a2ui-primary) 3%, var(--bg-elevated)),
+    var(--bg-elevated)
+  );
+}
+
+.a2ui-divider--horizontal {
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: var(--border);
+}
+
+.a2ui-divider--vertical {
+  display: inline-block;
+  width: 1px;
+  min-height: 24px;
+  align-self: stretch;
+  background: var(--border);
+}
+
+/* ---------- 按钮 ---------- */
+
+.a2ui-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.35;
+  cursor: pointer;
+  transition: filter 0.15s ease, background 0.15s ease, transform 0.12s ease;
+}
+
+.a2ui-button:active {
+  transform: translateY(1px);
+}
+
+.a2ui-button .a2ui-text .markdown {
+  color: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.a2ui-button .a2ui-text--body .markdown {
+  font-size: inherit;
+}
+
+.a2ui-button--primary {
+  background: var(--a2ui-primary);
+  color: #fff;
+  box-shadow: 0 6px 16px -8px color-mix(in srgb, var(--a2ui-primary) 80%, transparent);
+}
+
+.a2ui-button--primary:hover {
+  filter: brightness(1.07);
+}
+
+.a2ui-button--secondary {
+  border-color: color-mix(in srgb, var(--a2ui-primary) 25%, var(--border));
+  background: color-mix(in srgb, var(--a2ui-primary) 8%, var(--bg-elevated));
+  color: var(--a2ui-primary);
+}
+
+.a2ui-button--secondary:hover {
+  background: color-mix(in srgb, var(--a2ui-primary) 14%, var(--bg-elevated));
+}
+
+.a2ui-button--borderless {
+  padding: 6px 8px;
+  background: transparent;
+  color: var(--a2ui-primary);
+}
+
+.a2ui-button--borderless:hover {
+  background: color-mix(in srgb, var(--a2ui-primary) 8%, transparent);
+}
+
+/* ---------- 表单 ---------- */
+
+.a2ui-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.a2ui-field__label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-soft);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.a2ui-field__value {
+  color: var(--a2ui-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.a2ui-input {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  outline: none;
+  background: var(--bg-elevated);
+  color: var(--text);
+  font: inherit;
+  font-size: 13.5px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.a2ui-input:focus {
+  border-color: var(--a2ui-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--a2ui-primary) 15%, transparent);
+}
+
+.a2ui-input--textarea {
+  min-height: 88px;
+  resize: vertical;
+}
+
+.a2ui-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-soft);
+  font-size: 13.5px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.a2ui-checkbox input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--a2ui-primary);
+  cursor: pointer;
+}
+
+.a2ui-choice {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.a2ui-choice .a2ui-field__label {
+  margin-bottom: 2px;
+  padding: 0;
+}
+
+.a2ui-choice__option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-soft);
+  font-size: 13.5px;
+  cursor: pointer;
+}
+
+.a2ui-choice__option input {
+  accent-color: var(--a2ui-primary);
+  cursor: pointer;
+}
+
+.a2ui-slider {
+  width: 100%;
+  accent-color: var(--a2ui-primary);
+}
+
+/* ---------- 媒体 ---------- */
+
+.a2ui-image {
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--text) 5%, transparent);
+}
+
+.a2ui-image--icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+}
+
+.a2ui-image--avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.a2ui-image--smallFeature {
+  width: 100%;
+  max-width: 180px;
+  max-height: 140px;
+}
+
+.a2ui-image--mediumFeature {
+  width: 100%;
+  max-width: 300px;
+  max-height: 220px;
+}
+
+.a2ui-image--largeFeature {
+  width: 100%;
+  max-height: 340px;
+}
+
+.a2ui-image--header {
+  width: 100%;
+  max-height: 220px;
+}
+
+.a2ui-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--a2ui-primary);
+  line-height: 0;
+}
+
+.a2ui-video {
+  width: 100%;
+  border-radius: 12px;
+  background: #000;
+}
+
+.a2ui-audio {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.a2ui-audio__title {
+  color: var(--text-soft);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.a2ui-audio audio {
+  width: 100%;
+}
+
+/* ---------- Tabs / Modal ---------- */
+
+.a2ui-tabs {
+  width: 100%;
+}
+
+.a2ui-tabs__list {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+}
+
+.a2ui-tabs__tab {
+  padding: 8px 12px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.a2ui-tabs__tab.is-active {
+  border-bottom-color: var(--a2ui-primary);
+  color: var(--a2ui-primary);
+}
+
+.a2ui-tabs__panel {
+  animation: rise 0.2s ease both;
+}
+
+.a2ui-modal__trigger {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.a2ui-modal__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgb(2 6 23 / 0.55);
+  backdrop-filter: blur(4px);
+  animation: fade 0.18s ease both;
+}
+
+.a2ui-modal {
+  position: relative;
+  width: min(560px, 100%);
+  max-height: 82vh;
+  overflow: auto;
+  padding: 22px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--bg-elevated);
+  box-shadow: 0 30px 80px -20px rgb(0 0 0 / 0.5);
+  animation: rise 0.22s ease both;
+}
+
+.a2ui-modal__close {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--muted);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.a2ui-modal__close:hover {
+  background: color-mix(in srgb, var(--text) 8%, transparent);
+  color: var(--text);
+}
+
+/* ---------- 兜底 ---------- */
+
+.a2ui-missing,
+.a2ui-unknown {
+  display: inline-block;
+  padding: 4px 8px;
+  border: 1px dashed var(--border-strong);
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.a2ui-unknown code {
+  color: var(--danger);
+}
+
+@keyframes fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

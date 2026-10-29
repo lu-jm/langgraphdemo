@@ -28,6 +28,7 @@
 | A2UI 工具结果 | 工具统一返回 `{"a2ui_operations": [...]}`，兼容前端 A2UI middleware |
 | 固定 / 动态 A2UI | 后端代码构建固定卡片；LLM 子 Agent 按自然语言生成任意界面 |
 | 可观测性 | 请求 ID、处理耗时、结构化日志、健康检查 |
+| Web 前端 | React 19 + Vite：SSE 流式对话、Markdown、A2UI 组件渲染与 action 回传 |
 | 离线可测 | 注入 Fake ChatModel，无需真实 API Key 即可跑完整测试 |
 
 ---
@@ -42,6 +43,7 @@
 - Pydantic v2 + pydantic-settings
 - JSON Schema（Draft 2020-12）+ jsonschema
 - pytest + pytest-asyncio
+- 前端：React 19 + TypeScript + Vite 7，`react-markdown` + `remark-gfm`
 
 依赖使用 [uv](https://docs.astral.sh/uv/) 管理。
 
@@ -64,7 +66,18 @@ uv sync
 cp .env.example .env
 ```
 
-默认使用智谱 GLM：
+默认使用 DeepSeek（OpenAI 兼容接口）：
+
+```dotenv
+LLM_PROVIDER=openai
+OPENAI_API_KEY=sk-your-deepseek-key
+OPENAI_MODEL=deepseek-flash
+OPENAI_BASE_URL=https://api.deepseek.com
+# auto 会在 DeepSeek 域名下自动关闭思考模式
+OPENAI_THINKING_MODE=auto
+```
+
+也可以切换到智谱 GLM：
 
 ```dotenv
 LLM_PROVIDER=zhipu
@@ -72,13 +85,14 @@ ZHIPUAI_API_KEY=your-zhipu-key
 ZHIPUAI_MODEL=glm-4.7
 ```
 
-也可以切换到 OpenAI 或兼容接口：
+或切换到官方 OpenAI：
 
 ```dotenv
 LLM_PROVIDER=openai
 OPENAI_API_KEY=sk-...
 OPENAI_MODEL=gpt-4o-mini
-# OPENAI_BASE_URL=https://api.openai.com/v1
+OPENAI_BASE_URL=https://api.openai.com/v1
+OPENAI_THINKING_MODE=auto
 ```
 
 > `.env` 已在 `.gitignore` 中忽略，代码中不包含任何硬编码 Key。
@@ -112,6 +126,18 @@ uv run python main.py --serve
 uv run python main.py "1 加 1 等于几？"
 uv run python main.py "用卡片展示 12 乘 8 的结果"
 ```
+
+### 5. 启动前端
+
+```bash
+cd web
+npm install
+npm run dev
+```
+
+打开 <http://127.0.0.1:5173>。开发服务器会把 `/api`、`/health` 代理到
+`http://127.0.0.1:8000`，因此需要先启动后端。生产构建与部署方式见
+[`web/README.md`](web/README.md)。
 
 ---
 
@@ -148,6 +174,16 @@ uv run python main.py "用卡片展示 12 乘 8 的结果"
 │   │   └── routes/{system,chat,threads,a2ui,agent}.py
 │   ├── schemas/                # API 请求 / 响应模型（camelCase）
 │   └── services/               # chat / thread 业务服务
+├── web/                        # React 19 + Vite 前端（对话 / Markdown / A2UI）
+│   ├── src/
+│   │   ├── api/                # REST + AG-UI SSE 客户端
+│   │   ├── a2ui/               # A2UI 组件树渲染器与操作解析
+│   │   ├── components/         # Composer / Markdown / 工具调用
+│   │   ├── hooks/useAgent.ts   # 会话、流式事件、action、线程恢复
+│   │   ├── App.tsx
+│   │   └── index.css
+│   ├── vite.config.ts          # /api、/health 开发代理
+│   └── README.md
 ├── tests/                      # 44 个离线测试
 ├── main.py                     # 命令行入口
 ├── Dockerfile
@@ -412,14 +448,15 @@ curl -s http://127.0.0.1:8000/api/a2ui/actions \
 | `HOST` / `PORT` | `0.0.0.0` / `8000` | 监听地址 |
 | `LOG_LEVEL` | `INFO` | 日志级别 |
 | `CORS_ORIGINS` | `*` | 允许来源，逗号分隔；生产环境请收紧 |
-| `LLM_PROVIDER` | `zhipu` | `zhipu` 或 `openai` |
+| `LLM_PROVIDER` | `openai` | `zhipu` 或 `openai`（OpenAI 兼容接口） |
 | `ZHIPUAI_API_KEY` | 空 | 智谱 API Key |
 | `ZHIPUAI_MODEL` | `glm-4.7` | 智谱模型名 |
 | `ZHIPUAI_TEMPERATURE` | `0.3` | 采样温度 |
-| `OPENAI_API_KEY` | 空 | OpenAI / 兼容接口 Key |
-| `OPENAI_MODEL` | `gpt-4o-mini` | OpenAI 模型名 |
-| `OPENAI_BASE_URL` | 空 | 自定义兼容接口地址 |
+| `OPENAI_API_KEY` | 空 | OpenAI / 兼容接口 Key（如 DeepSeek） |
+| `OPENAI_MODEL` | `deepseek-flash` | OpenAI / 兼容接口模型名 |
+| `OPENAI_BASE_URL` | `https://api.deepseek.com` | 自定义兼容接口地址 |
 | `OPENAI_TEMPERATURE` | `0.3` | 采样温度 |
+| `OPENAI_THINKING_MODE` | `auto` | `auto` / `enabled` / `disabled`；DeepSeek 思考模式不支持强制 `tool_choice`，`auto` 会在 DeepSeek 域名下关闭 |
 | `AGENT_RECURSION_LIMIT` | `30` | LangGraph 最大步数 |
 | `AGENT_PARALLEL_TOOL_CALLS` | `false` | 是否允许并行工具调用 |
 | `ENABLE_DYNAMIC_A2UI` | `true` | 是否启用 `generate_a2ui` 动态界面 |
@@ -451,7 +488,7 @@ SQLite checkpointer 在 lifespan 中通过 `AsyncExitStack` 创建并自动关�
 uv run pytest
 ```
 
-当前包含 44 个测试，覆盖：
+当前包含 50 个测试，覆盖：
 
 - A2UI 消息模型、camelCase 序列化、官方 Schema 校验；
 - SurfaceBuilder 与组件图（root、循环、悬空引用）；
@@ -468,12 +505,30 @@ tests/
 ├── helpers.py              # FakeToolChatModel、SSE 解析
 ├── test_system.py
 ├── test_a2ui_models.py
+├── test_a2ui_normalize.py
 ├── test_a2ui_service.py
 ├── test_a2ui_api.py
 ├── test_chat_api.py
 ├── test_agui_endpoint.py
+├── test_llm.py
 └── test_tools.py
 ```
+
+---
+
+## 常见问题
+
+### DeepSeek 报错 `Thinking mode does not support this tool_choice`
+
+DeepSeek V4 默认开启思考模式，而动态 A2UI 子 Agent（`generate_a2ui`）需要
+强制指定 `tool_choice`。在 `.env` 中关闭思考模式后重启服务：
+
+```dotenv
+OPENAI_THINKING_MODE=disabled
+```
+
+也可以设为 `auto`：检测到 `OPENAI_BASE_URL` 包含 `deepseek` 时自动关闭，
+其他 OpenAI 兼容接口不发送 `thinking` 字段。设置 `enabled` 可强制开启。
 
 ---
 

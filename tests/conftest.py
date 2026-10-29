@@ -28,8 +28,9 @@ def settings() -> Settings:
     return Settings(
         _env_file=None,
         environment="test",
-        zhipuai_api_key="test-key",
-        zhipuai_model="glm-test",
+        llm_provider="openai",
+        openai_api_key="test-key",
+        openai_model="deepseek-test",
         log_level="WARNING",
         checkpoint_backend="memory",
         agui_emit_raw_events=False,

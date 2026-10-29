@@ -31,6 +31,7 @@ def build_chat_model(settings: Settings) -> BaseChatModel:
             api_key=settings.openai_api_key,
             base_url=settings.openai_base_url,
             temperature=settings.openai_temperature,
+            extra_body=settings.openai_extra_body,
         )
 
     from langchain_community.chat_models import ChatZhipuAI

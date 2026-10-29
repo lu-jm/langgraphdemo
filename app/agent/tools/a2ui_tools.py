@@ -18,6 +18,7 @@ from langchain_core.language_models import BaseChatModel
 from langchain_core.tools import BaseTool, tool
 
 from app.a2ui.builder import SurfaceBuilder
+from app.a2ui.catalog import load_basic_catalog
 from app.a2ui.constants import BASIC_CATALOG_ID
 from app.a2ui.toolkit import operations_envelope
 from app.agent.tools.math import add, multiply
@@ -97,12 +98,14 @@ def build_agent_tools(
                 {
                     "model": model,
                     "default_catalog_id": settings.a2ui_catalog_id,
+                    "catalog": load_basic_catalog(),
                     "guidelines": {
                         "composition_guide": (
                             "## 语言要求\n"
                             "界面中的所有文案（标题、标签、按钮、说明）使用简体中文，"
                             "除非用户明确要求其他语言。\n"
-                            "surfaceId 使用小写英文和连字符。"
+                            "surfaceId 使用小写英文和连字符。\n"
+                            "Image 组件使用 description 字段作为替代文本，不要使用 alt。"
                         )
                     },
                 }

@@ -19,6 +19,7 @@ from app.a2ui.exceptions import (
 )
 from app.a2ui.json_pointer import JsonPointerError, remove_value, set_value
 from app.a2ui.models import A2UIClientAction, A2UIMessage
+from app.a2ui.normalize import normalize_operation
 from app.a2ui.store import Surface, SurfaceStore, utcnow
 from app.a2ui.validation import (
     validate_components,
@@ -89,7 +90,8 @@ class A2UIService:
         *,
         strict: bool = True,
     ) -> tuple[Surface | None, list[ValidationIssue]]:
-        envelope = message.to_envelope()
+        envelope = normalize_operation(message.to_envelope())
+        message = A2UIMessage.from_envelope(envelope)
         payload = message._payload()
         assert payload is not None  # model validator 保证
 
